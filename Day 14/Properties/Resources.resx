@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Input" xml:space="preserve">
+    <value>4 DGXQJ =&gt; 5 QNMV
+10 WHSGM =&gt; 6 LFXWM
+3 XRJH, 15 FVRFC, 19 DGXQJ, 2 BZWFZ, 8 XDQG, 1 LFXWM, 6 CDRP =&gt; 1 LWKJL
+1 TLGRN =&gt; 5 BDPJD
+1 DBGK, 5 DTWF =&gt; 3 FVRFC
+7 NMWGH =&gt; 9 CGRFH
+1 TLRZ =&gt; 2 XRJH
+1 RGRHS =&gt; 7 WSGW
+1 DGXQJ, 15 PWXFD, 9 XRJH =&gt; 4 LGVS
+5 QHGP, 1 WHSGM =&gt; 7 DBGK
+1 RHKVX =&gt; 5 CDRP
+6 VMVJS =&gt; 5 VFVBP
+1 WSGW =&gt; 6 PGBK
+1 FXLD, 1 VMVJS =&gt; 8 PGJC
+4 WCWLK =&gt; 1 KCHWM
+11 XDQG =&gt; 2 QMVLD
+137 ORE =&gt; 4 KRSK
+4 KRSK =&gt; 5 HSCF
+1 KRSK =&gt; 7 XPGP
+4 BZWFZ, 1 TLGRN, 6 CTBV =&gt; 1 CPXLQ
+9 WNVTR, 3 FVRFC, 6 CTBV =&gt; 2 RGRHS
+5 KRSK =&gt; 3 JLSHT
+4 DHJD =&gt; 2 DTWF
+9 PGJC =&gt; 9 RNJCV
+1 KCHWM, 10 DGXQJ =&gt; 4 PWXFD
+6 KSJPW =&gt; 8 DHJD
+6 DBGK, 1 ZPVDZ =&gt; 3 BJLQG
+1 WNVTR, 2 XRJH =&gt; 9 ZPVDZ
+3 DHJD =&gt; 8 KVKM
+2 HSCF, 1 TLRZ =&gt; 9 QHGP
+1 PLDS, 7 BJLQG, 1 WNVTR =&gt; 3 XDQG
+14 CTBV, 23 PLDS, 5 MCNR =&gt; 9 TLGRN
+1 PWXFD =&gt; 7 DJSW
+2 DJSW =&gt; 6 MCNR
+1 CTBV, 7 PGBK, 5 BDPJD, 5 DTWF, 12 PLDS, 31 RNJCV, 2 KVKM =&gt; 6 DJLXD
+2 XRJH, 2 FXLD =&gt; 2 WHSGM
+4 XPGP, 12 PWXFD =&gt; 9 FXLD
+2 LGVS, 1 VMVJS, 1 QNMV =&gt; 3 HKXCV
+1 WCWLK =&gt; 6 TLRZ
+115 ORE =&gt; 7 TKMGN
+2 TLGRN, 2 DHJD, 1 MCNR =&gt; 9 SCZCQ
+13 FVRFC =&gt; 5 XBLQD
+5 XDQG, 1 DZJLT =&gt; 4 CPGS
+5 XPGP, 1 DHJD =&gt; 6 CTBV
+1 XRJH, 2 KCHWM, 1 FXLD =&gt; 9 FSRD
+5 CTBV, 1 CDRP, 5 RNJCV =&gt; 6 DZJLT
+151 ORE =&gt; 6 WCWLK
+4 HKXCV =&gt; 9 PLDS
+16 KCHWM =&gt; 6 VKPGK
+3 VKPGK =&gt; 1 HCMT
+5 QMVLD, 8 HCMT, 25 CPXLQ, 29 JLSHT, 9 CPGS, 8 RHKVX, 19 DQTLW, 5 LWKJL, 2 DJLXD, 14 CVBQ, 7 SCZCQ, 17 FSRD, 3 JLHWQ, 6 XDQG =&gt; 1 FUEL
+1 FXLD, 1 VMVJS =&gt; 8 NMWGH
+2 KCHWM, 6 HSCF =&gt; 9 KSJPW
+2 DBGK, 17 NMWGH =&gt; 1 JLHWQ
+26 CDRP =&gt; 8 DQTLW
+2 PLDS =&gt; 7 HPCR
+6 LGVS, 21 DGXQJ =&gt; 4 RHKVX
+6 VFVBP =&gt; 2 BZWFZ
+2 XDQG, 3 BDPJD, 10 DJSW, 1 CGRFH, 3 HPCR, 2 RHKVX, 5 BZWFZ, 13 XBLQD =&gt; 7 CVBQ
+8 TKMGN =&gt; 7 DGXQJ
+1 JLSHT, 20 KSJPW =&gt; 7 VMVJS
+16 DJSW, 1 PGJC, 4 FXLD =&gt; 8 WNVTR</value>
+  </data>
+  <data name="Test" xml:space="preserve">
+    <value>2 VPVL, 7 FWMGM, 2 CXFTF, 11 MNCFX =&gt; 1 STKFG
+17 NVRVD, 3 JNWZP =&gt; 8 VPVL
+53 STKFG, 6 MNCFX, 46 VJHF, 81 HVMC, 68 CXFTF, 25 GNMV =&gt; 1 FUEL
+22 VJHF, 37 MNCFX =&gt; 5 FWMGM
+139 ORE =&gt; 4 NVRVD
+144 ORE =&gt; 7 JNWZP
+5 MNCFX, 7 RFSQX, 2 FWMGM, 2 VPVL, 19 CXFTF =&gt; 3 HVMC
+5 VJHF, 7 MNCFX, 9 VPVL, 37 CXFTF =&gt; 6 GNMV
+145 ORE =&gt; 6 MNCFX
+1 NVRVD =&gt; 8 CXFTF
+1 VJHF, 6 MNCFX =&gt; 4 RFSQX
+176 ORE =&gt; 6 VJHF</value>
+  </data>
+</root>
