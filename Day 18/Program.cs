@@ -125,9 +125,9 @@ namespace Day_18
                         continue;
                     if ((d.keys & current.keysOwned) != d.keys)
                         continue;
-
                     if (q.Any(x => (x.keysOwned == (current.keysOwned | k.keyBin)) && (k == x.currentNode) && (x.distanceSoFar <= current.distanceSoFar + d.distance)))
                         continue;
+
                     q.Enqueue((current.distanceSoFar + d.distance, current.keysOwned | k.keyBin, k));
                 }
             }
@@ -213,6 +213,7 @@ namespace Day_18
         public char type;
         public byte keyIndex;
         public int keyBin;
+
         public PathNode(int x, int y)
         {
             this.x = x;
