@@ -21,6 +21,7 @@ namespace Day_18
             //Parsing
             string[] input = Resources.Input.Split("\r\n");
             List<PathNode> keyNodes = new List<PathNode>();
+            List<PathNode> gateNodes = new List<PathNode>();
             PathNode playerNode = null;
             PathNode[,] map = new PathNode[input.Max(x => x.Length), input.Length];
             Dictionary<char, byte> keyIndexes = new Dictionary<char, byte>();
@@ -49,29 +50,24 @@ namespace Day_18
                         {
                             node.isGate = true;
                             node.type = char.ToLower(input[j][i]);
-                            if (keyIndexes.ContainsKey(node.type))
-                                node.keyIndex = keyIndexes[node.type];
-                            else
-                            {
-                                node.keyIndex = currentIndex;
-                                keyIndexes.Add(node.type, currentIndex);
-                                currentIndex++;
-                            }
+                            gateNodes.Add(node);
                         }
                         else
                         {
                             node.isKey = true;
                             node.type = input[j][i];
                             keyNodes.Add(node);
-                            if (keyIndexes.ContainsKey(node.type))
-                                node.keyIndex = keyIndexes[node.type];
-                            else
-                            {
-                                node.keyIndex = currentIndex;
-                                keyIndexes.Add(node.type, currentIndex);
-                                currentIndex++;
-                            }
                         }
+
+                        if (keyIndexes.ContainsKey(node.type))
+                            node.keyIndex = keyIndexes[node.type];
+                        else
+                        {
+                            node.keyIndex = currentIndex;
+                            keyIndexes.Add(node.type, currentIndex);
+                            currentIndex++;
+                        }
+                        node.keyBin = 1 << node.keyIndex;
                     }
 
                     if(!(map[i, j] is null)) //neighboring nodes
@@ -103,27 +99,28 @@ namespace Day_18
             keyNodes.Remove(playerNode);
 
             Console.WriteLine($"Precomputing distances done after {sw.Elapsed}");
-            int allKeysOwned = 0x03FFFFFF; //26 1s
 
+            int allKeysOwned = 0x03FFFFFF; //26 1s
+            
             //finding best path
             LinkedList<(int distanceSoFar, int keysOwned, PathNode currentNode)> q = new LinkedList<(int distanceSoFar, int keysOwned, PathNode currentNode)>();
             q.AddFirst((0, 0, playerNode));
 
             long h = 0;
-
+            int highest = 0;
             while(q.Count > 0)
             {
                 var current = q.First.Value; //dequeueing the one with lowest distance
-                foreach(var n in q)
-                    if (n.distanceSoFar < current.distanceSoFar)
-                        current = n;
+
                 q.Remove(current);
+                if (current.distanceSoFar > highest)
+                    highest = current.distanceSoFar;
 
-
-                if (h % 10000 == 0)
-                    Console.WriteLine(h + " " + q.Count + " " + current.distanceSoFar);
+                
+                if (h % 100000 == 0)
+                    Console.WriteLine(h + " " + q.Count + " " + current.distanceSoFar + " " + Convert.ToString(current.keysOwned, 2));
                 h++;
-
+                
                 //Console.WriteLine(q.Count);
 
                 if (current.keysOwned == allKeysOwned)
@@ -135,18 +132,18 @@ namespace Day_18
 
                 foreach (var k in keyNodes)
                 {
-                    if ((current.keysOwned & (1 << k.keyIndex)) != 0)
+                    if ((current.keysOwned & k.keyBin) != 0)
                         continue;
                     var d = distances[(current.currentNode.keyIndex << 8) + k.keyIndex];
                     if ((d.gates & current.keysOwned) != d.gates)
                         continue;
-                    if ((d.keys & current.keysOwned) != d.gates)
+                    if ((d.keys & current.keysOwned) != d.keys)
                         continue;
-                    q.AddLast((current.distanceSoFar + d.distance, current.keysOwned | (1 << k.keyIndex), k));
+                    q.AddLast((current.distanceSoFar + d.distance, current.keysOwned | k.keyBin, k));
                 }
             }
 
-            Console.WriteLine("Didn't find path :(");
+            Console.WriteLine("Didn't find path :( " + highest + " " + sw.Elapsed);
         }
 
         
@@ -226,7 +223,7 @@ namespace Day_18
         public bool isKey = false;
         public char type;
         public byte keyIndex;
-
+        public int keyBin;
         public PathNode(int x, int y)
         {
             this.x = x;
