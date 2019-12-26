@@ -4,112 +4,153 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
 using System.IO;
+
 namespace Day_18
 {
     class Program
     {
-        static LinkedList<PathNode> pathNodes = new LinkedList<PathNode>();
-        static LinkedList<PathNode> keyNodes = new LinkedList<PathNode>();
-        static PathNode playerPos;
-        static long best = long.MaxValue;
-        static Dictionary<(PathNode a, PathNode b), (int distance, char[] gates, char[] keys)> distances = new Dictionary<(PathNode a, PathNode b), (int distance, char[] gates, char[] keys)>();
         static void Main()
         {
-            Stopwatch timer = new Stopwatch();
-            timer.Start();
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+
+            /*
+             * There are 26 keys so Int32 will be enough to express each one as a specific bit
+            */ 
+
+            //Parsing
             string[] input = Resources.Input.Split("\r\n");
+            List<PathNode> keyNodes = new List<PathNode>();
+            PathNode playerNode = null;
+            PathNode[,] map = new PathNode[input.Max(x => x.Length), input.Length];
+            Dictionary<char, byte> keyIndexes = new Dictionary<char, byte>();
+            Dictionary<int, (int distance, int gates, int keys)> distances = new Dictionary<int, (int distance, int gates, int keys)>();
+            byte currentIndex = 0;
+            
             for (int j = 0; j < input.Length; j++)
                 for (int i = 0; i < input[j].Length; i++)
-                    if (input[j][i] == '.')
+                {
+                    if (input[j][i] == '.') //normal node
                     {
-                        pathNodes.AddLast(new PathNode(i, j));
+                        map[i, j] = new PathNode(i, j);
                     }
-                    else if (input[j][i] == '@')
+                    else if (input[j][i] == '@') //player node
                     {
                         var node = new PathNode(i, j);
-                        playerPos = node;
-                        pathNodes.AddLast(node);
+                        playerNode = node;
+                        map[i, j] = node;
+                        playerNode.keyIndex = 0xFF;
                     }
-                    else if (char.IsLetter(input[j][i]))
+                    else if (char.IsLetter(input[j][i])) //gate and key nodes
                     {
                         var node = new PathNode(i, j);
-                        pathNodes.AddLast(node);
+                        map[i, j] = node;
                         if (char.IsUpper(input[j][i]))
                         {
                             node.isGate = true;
                             node.type = char.ToLower(input[j][i]);
+                            if (keyIndexes.ContainsKey(node.type))
+                                node.keyIndex = keyIndexes[node.type];
+                            else
+                            {
+                                node.keyIndex = currentIndex;
+                                keyIndexes.Add(node.type, currentIndex);
+                                currentIndex++;
+                            }
                         }
                         else
                         {
                             node.isKey = true;
                             node.type = input[j][i];
+                            keyNodes.Add(node);
+                            if (keyIndexes.ContainsKey(node.type))
+                                node.keyIndex = keyIndexes[node.type];
+                            else
+                            {
+                                node.keyIndex = currentIndex;
+                                keyIndexes.Add(node.type, currentIndex);
+                                currentIndex++;
+                            }
                         }
                     }
-            foreach (var p1 in pathNodes)
-                foreach (var p2 in pathNodes.Where(n => Math.Abs(p1.x - n.x) + Math.Abs(p1.y - n.y) == 1))
-                    p1.neighbours.AddLast(p2);
 
-            keyNodes = new LinkedList<PathNode>(pathNodes.Where(p => p.isKey));
-            keyNodes.AddLast(playerPos);
-            foreach (var a in keyNodes)
-                foreach (var b in keyNodes)
-                    distances.Add((a, b), FindPath(a, b));
-            keyNodes.RemoveLast();
-            Console.WriteLine("Precomputing done.");
-            getKeys(new LinkedList<char>(), keyNodes, 0, playerPos);
-            timer.Stop();
-            Console.WriteLine($"Shortest path is {best}. {timer.Elapsed.ToString()} elapsed."); //4830;
-            File.WriteAllText("output.txt", $"Shortest path is {best}. {timer.Elapsed.ToString()} elapsed.");
+                    if(!(map[i, j] is null)) //neighboring nodes
+                    {
+                        if(!(map[i - 1, j] is null))
+                        {
+                            map[i, j].neighbours.AddLast(map[i - 1, j]);
+                            map[i - 1, j].neighbours.AddLast(map[i, j]);
+                        }
+                        if (!(map[i, j - 1] is null))
+                        {
+                            map[i, j].neighbours.AddLast(map[i, j - 1]);
+                            map[i, j - 1].neighbours.AddLast(map[i, j]);
+                        }
+                    }
+                }
+
+            Console.WriteLine($"Parsing done after {sw.Elapsed}");
+
+            //finding distances between key nodes
+            keyNodes.Add(playerNode);
+            for (int i = 0; i < keyNodes.Count - 1; i++)
+                for (int j = i + 1; j < keyNodes.Count; j++)
+                {
+                    var values = FindPath(keyNodes[i], keyNodes[j]);
+                    distances.Add((keyNodes[i].keyIndex << 8) + keyNodes[j].keyIndex, values);
+                    distances.Add((keyNodes[j].keyIndex << 8) + keyNodes[i].keyIndex, values);
+                }
+            keyNodes.Remove(playerNode);
+
+            Console.WriteLine($"Precomputing distances done after {sw.Elapsed}");
+            int allKeysOwned = 0x03FFFFFF; //26 1s
+
+            //finding best path
+            LinkedList<(int distanceSoFar, int keysOwned, PathNode currentNode)> q = new LinkedList<(int distanceSoFar, int keysOwned, PathNode currentNode)>();
+            q.AddFirst((0, 0, playerNode));
+
+            long h = 0;
+
+            while(q.Count > 0)
+            {
+                var current = q.First.Value; //dequeueing the one with lowest distance
+                foreach(var n in q)
+                    if (n.distanceSoFar < current.distanceSoFar)
+                        current = n;
+                q.Remove(current);
+
+
+                if (h % 10000 == 0)
+                    Console.WriteLine(h + " " + q.Count + " " + current.distanceSoFar);
+                h++;
+
+                //Console.WriteLine(q.Count);
+
+                if (current.keysOwned == allKeysOwned)
+                {
+                    Console.WriteLine($"Shortest path is {current.distanceSoFar}. Found after {sw.Elapsed}"); //4830
+                    File.AppendAllText("output.txt", $"Shortest path is {current.distanceSoFar}. Found after {sw.Elapsed}");
+                    return;
+                }
+
+                foreach (var k in keyNodes)
+                {
+                    if ((current.keysOwned & (1 << k.keyIndex)) != 0)
+                        continue;
+                    var d = distances[(current.currentNode.keyIndex << 8) + k.keyIndex];
+                    if ((d.gates & current.keysOwned) != d.gates)
+                        continue;
+                    if ((d.keys & current.keysOwned) != d.gates)
+                        continue;
+                    q.AddLast((current.distanceSoFar + d.distance, current.keysOwned | (1 << k.keyIndex), k));
+                }
+            }
+
+            Console.WriteLine("Didn't find path :(");
         }
 
-        public static void getKeys(LinkedList<char> keysOwned, LinkedList<PathNode> keysWanted, int stepsSoFar, PathNode current)
-        {
-            if(keysWanted.Count == 0)
-            {
-                best = stepsSoFar;
-                Console.WriteLine(best);
-                return;
-            }
-            var k = keysWanted.First;
-            while (true)
-            {
-                var info = distances[(current, k.Value)];
-                if (stepsSoFar + info.distance >= best)
-                {
-                    if (k == keysWanted.Last)
-                        break;
-                    k = k.Next;
-                    continue;
-                }
-                if ((info.gates.Length > 0 && info.gates.Any(x => !keysOwned.Contains(x))) || (info.keys.Length > 0 && info.keys.Any(x => !keysOwned.Contains(x))))
-                {
-                    if (k == keysWanted.Last)
-                        break;
-                    k = k.Next;
-                    continue;
-                }
-                keysOwned.AddLast(k.Value.type);
-
-                bool last = k == keysWanted.Last;
-                PathNode anchor = null;
-                if (!last)
-                    anchor = k.Next.Value;
-                keysWanted.Remove(k); //TODO improve to not create a new list
-                getKeys(keysOwned, keysWanted, stepsSoFar + info.distance, k.Value);
-                keysOwned.Remove(k.Value.type);
-
-                if (last)
-                {
-                    keysWanted.AddLast(k);
-                    break;
-                }
-                var anchorNode = keysWanted.Find(anchor);
-                keysWanted.AddBefore(anchorNode, k.Value);
-                k = anchorNode;
-            }
-        }
         
-        static (int distance, char[] gates, char[] keys) FindPath(PathNode from, PathNode to)
+        static (int distance, int gates, int keys) FindPath(PathNode from, PathNode to)
         {
             LinkedList<PathNode> open = new LinkedList<PathNode>();
             LinkedList<PathNode> closed = new LinkedList<PathNode>();
@@ -150,19 +191,21 @@ namespace Day_18
 
             current = to.pathParent;
             int dist = 0;
-            LinkedList<char> gates = new LinkedList<char>();
-            LinkedList<char> keys = new LinkedList<char>();
+            int gates = 0;
+            int keys = 0;
             while (!(current is null))
             {
                 dist++;
-                if(current.isGate)
-                    gates.AddLast(current.type);
-                else if(current.isKey)
-                    keys.AddLast(current.type);
+                if (!(current.pathParent is null))
+                {
+                    if (current.isGate)
+                        gates |= 1 << current.keyIndex;
+                    else if (current.isKey)
+                        keys |= 1 << current.keyIndex;
+                }
                 current = current.pathParent;
             }
-
-            return (dist, gates.ToArray(), keys.ToArray());
+            return (dist, gates, keys);
         }
     }
 
@@ -178,9 +221,11 @@ namespace Day_18
         public float F { get => g + h; }
         public PathNode pathParent;
 
+        //key stuff
         public bool isGate = false;
         public bool isKey = false;
         public char type;
+        public byte keyIndex;
 
         public PathNode(int x, int y)
         {
