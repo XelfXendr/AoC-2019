@@ -21,7 +21,6 @@ namespace Day_18
             //Parsing
             string[] input = Resources.Input.Split("\r\n");
             List<PathNode> keyNodes = new List<PathNode>();
-            List<PathNode> gateNodes = new List<PathNode>();
             PathNode playerNode = null;
             PathNode[,] map = new PathNode[input.Max(x => x.Length), input.Length];
             Dictionary<char, byte> keyIndexes = new Dictionary<char, byte>();
@@ -50,7 +49,6 @@ namespace Day_18
                         {
                             node.isGate = true;
                             node.type = char.ToLower(input[j][i]);
-                            gateNodes.Add(node);
                         }
                         else
                         {
@@ -103,31 +101,19 @@ namespace Day_18
             int allKeysOwned = 0x03FFFFFF; //26 1s
             
             //finding best path
-            LinkedList<(int distanceSoFar, int keysOwned, PathNode currentNode)> q = new LinkedList<(int distanceSoFar, int keysOwned, PathNode currentNode)>();
-            q.AddFirst((0, 0, playerNode));
+            Queue<(int distanceSoFar, int keysOwned, PathNode currentNode)> q = new Queue<(int distanceSoFar, int keysOwned, PathNode currentNode)>();
+            q.Enqueue((0, 0, playerNode));
 
-            long h = 0;
-            int highest = 0;
+            int shortest = int.MaxValue;
             while(q.Count > 0)
             {
-                var current = q.First.Value; //dequeueing the one with lowest distance
-
-                q.Remove(current);
-                if (current.distanceSoFar > highest)
-                    highest = current.distanceSoFar;
-
-                
-                if (h % 100000 == 0)
-                    Console.WriteLine(h + " " + q.Count + " " + current.distanceSoFar + " " + Convert.ToString(current.keysOwned, 2));
-                h++;
-                
-                //Console.WriteLine(q.Count);
+                var current = q.Dequeue();
 
                 if (current.keysOwned == allKeysOwned)
                 {
-                    Console.WriteLine($"Shortest path is {current.distanceSoFar}. Found after {sw.Elapsed}"); //4830
-                    File.AppendAllText("output.txt", $"Shortest path is {current.distanceSoFar}. Found after {sw.Elapsed}");
-                    return;
+                    if (current.distanceSoFar < shortest)
+                        shortest = current.distanceSoFar;
+                    continue;
                 }
 
                 foreach (var k in keyNodes)
@@ -139,11 +125,14 @@ namespace Day_18
                         continue;
                     if ((d.keys & current.keysOwned) != d.keys)
                         continue;
-                    q.AddLast((current.distanceSoFar + d.distance, current.keysOwned | k.keyBin, k));
+
+                    if (q.Any(x => (x.keysOwned == (current.keysOwned | k.keyBin)) && (k == x.currentNode) && (x.distanceSoFar <= current.distanceSoFar + d.distance)))
+                        continue;
+                    q.Enqueue((current.distanceSoFar + d.distance, current.keysOwned | k.keyBin, k));
                 }
             }
 
-            Console.WriteLine("Didn't find path :( " + highest + " " + sw.Elapsed);
+            Console.WriteLine($"Shortest path is {shortest}. Found after {sw.Elapsed}"); //4830
         }
 
         
